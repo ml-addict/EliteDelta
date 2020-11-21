@@ -1,4 +1,5 @@
 import java.util.List;
+import java.util.ArrayList;
 
 /**
  * A stream of size n containing (id, value) pairs is arriving. The
@@ -22,12 +23,35 @@ import java.util.List;
 public class OrderedStream {
 
     private int n;
+    private String[] stream;
+    private int ptr;
 
     public OrderedStream(int n) {
         this.n = n;
+        this.stream = new String[n];
+        this.ptr = 0;
     }
 
     public List<String> insert(int id, String value) {
-        return null;
+        stream[id-1] = value;
+        List<String> chunk = new ArrayList<>();
+        if (ptr == id-1) {
+            // O(n) time complexity.
+            // The ptr can extend up to the length of the `stream` array.
+            while (ptr < stream.length && stream[ptr] != null) {
+                chunk.add(stream[ptr]);
+                ptr++;
+            }
+        }
+        return chunk;
+    }
+
+    public static void main(String[] args) {
+        OrderedStream obj = new OrderedStream(5);
+        System.out.println(obj.insert(3, "cccc"));
+        System.out.println(obj.insert(1, "aaaa"));
+        System.out.println(obj.insert(2, "bbbb"));
+        System.out.println(obj.insert(5, "eeee"));
+        System.out.println(obj.insert(4, "dddd"));
     }
 }
